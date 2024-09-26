@@ -20,19 +20,17 @@ public class Login {
 		
 		Toolkit t = Toolkit.getDefaultToolkit();
 		Image img = t.getImage("img/logo.jpg");
+		jf.setIconImage(img);
 		
 		ImageIcon background = new ImageIcon("img/1.png");
 		JLabel label = new JLabel(background);
-		
-		jf.setIconImage(img);
-		
 		jf.getLayeredPane().add(label, new Integer(Integer.MIN_VALUE));
 		
 		JPanel jp = (JPanel)jf.getContentPane();
 		jp.setOpaque(false);
+
 		JPanel jpanel = new JPanel();
 		jpanel.setOpaque(false);
-		
 		jpanel.setLayout(null);
 		
 		JLabel lb0 = new JLabel("校园行走最优路径查询系统");
@@ -65,7 +63,7 @@ public class Login {
 		jf.setResizable(false);
 		jf.setVisible(true);
 		
-		label.setSize(jf.getSize());
+		// label.setSize(jf.getSize());
 		
 		//确保背景图片自适应窗口大小
         jf.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -77,7 +75,6 @@ public class Login {
 		
 		//查询地点绑定事件监听
 		jb1.addActionListener(new ActionListener(){
-			
 			@Override
 			public void actionPerformed(ActionEvent a){
 				// jf.setVisible(false);
@@ -90,15 +87,15 @@ public class Login {
 			
 			@Override
 			public void actionPerformed(ActionEvent a){
-				jf.setVisible(false);
+				// jf.setVisible(false);
 				// System.out.println("Click Path");
 				// new MapPanelV2("img/3.png", "map/poi.txt");
-				MapPanelV2 mapPanel = new MapPanelV2("img/3.png", "map/poi.txt");
+				MapPanelV2 mapPanel = new MapPanelV2("img/3.png", "map/poi.txt", "map/edges.txt");
 				jf.getContentPane().removeAll();
 				jf.getContentPane().add(mapPanel);
 				jf.revalidate();
 				jf.repaint();
-				jf.setVisible(true);
+				// jf.setVisible(true);
 
 				// try {
 				// 	// new QueryPath();

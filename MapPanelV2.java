@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class MapPanelV2 extends JPanel {
     private Map<String, Point> pointsOfInterest;
-    private Map<String, Integer> nameToIndexMap; // New HashMap
-    private BufferedImage mapImage; // null
+    private Map<String, Integer> nameToIndexMap; 
+    private BufferedImage mapImage;
     private int originalImageWidth;
     private int originalImageHeight;
 
@@ -24,9 +24,9 @@ public class MapPanelV2 extends JPanel {
     private JComboBox<String> destComboBox;
     private JButton findPathButton;
 
-    public MapPanelV2(String imagePath, String pointsFilePath) {
+    public MapPanelV2(String imagePath, String pointsFilePath, String edgesFilePath) {
         pointsOfInterest = new HashMap<>();
-        nameToIndexMap = new HashMap<>(); // Initialize the new HashMap
+        nameToIndexMap = new HashMap<>(); 
         nodes = new ArrayList<Point>();
 
         try {
@@ -38,7 +38,7 @@ public class MapPanelV2 extends JPanel {
             // Load points of interest from file
             loadPointsFromFile(pointsFilePath);
 
-            finder = new DijkstraFind(new WeightedGraph("map/edges.txt", "map/poi.txt"));
+            finder = new DijkstraFind(new WeightedGraph(edgesFilePath, pointsFilePath));
 
             // Initialize UI components
             initializeUI();
@@ -53,16 +53,17 @@ public class MapPanelV2 extends JPanel {
         JPanel controlPanel = new JPanel();
         sourceComboBox = new JComboBox<>(pointsOfInterest.keySet().toArray(new String[0]));
         destComboBox = new JComboBox<>(pointsOfInterest.keySet().toArray(new String[0]));
-        findPathButton = new JButton("Find Path");
+        findPathButton = new JButton("查找最短路径");
 
-        controlPanel.add(new JLabel("Source:"));
+        controlPanel.add(new JLabel("起点:"));
         controlPanel.add(sourceComboBox);
-        controlPanel.add(new JLabel("Destination:"));
+        controlPanel.add(new JLabel("终点:"));
         controlPanel.add(destComboBox);
         controlPanel.add(findPathButton);
 
         add(controlPanel, BorderLayout.NORTH);
 
+        // 点击按钮要触发的时间
         findPathButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -178,8 +179,9 @@ public class MapPanelV2 extends JPanel {
 
         String imagePath = "img/3.png";
         String pointsFilePath = "map/poi.txt";
+        String edgesFilePath = "map/edges.txt";
 
-        MapPanelV2 mapPanel = new MapPanelV2(imagePath, pointsFilePath);
+        MapPanelV2 mapPanel = new MapPanelV2(imagePath, pointsFilePath, edgesFilePath);
         frame.add(mapPanel);
         frame.setVisible(true);
     }
