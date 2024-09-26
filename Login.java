@@ -40,20 +40,24 @@ public class Login {
 		
 		JButton jb1 = new JButton("查询地点");
 		JButton jb2 = new JButton("查询路径");
+		JButton jb21 = new JButton("查询路径（突发）");
 		JButton jb3 = new JButton("显示地图");
 		
 		jb1.setFont(new Font("微软雅黑", Font.PLAIN, 20));
 		jb2.setFont(new Font("微软雅黑", Font.PLAIN, 20));
+		jb21.setFont(new Font("微软雅黑", Font.PLAIN, 20));
 		jb3.setFont(new Font("微软雅黑", Font.PLAIN, 20));
 		
 		jb1.setBounds(490, 120, 120, 30);
 		jb2.setBounds(490, 170, 120, 30);
+		jb21.setBounds(490, 270, 200, 30);
 		jb3.setBounds(490, 220, 120, 30);
 		
 		jpanel.add(lb0);
 		jpanel.add(jb1);
 		jpanel.add(jb2);
 		jpanel.add(jb3);
+		jpanel.add(jb21);
 		
 		jf.add(jpanel);
 		
@@ -105,6 +109,29 @@ public class Login {
 			}
 		});
 		
+		//查询路径绑定事件监听
+		jb21.addActionListener(new ActionListener(){
+					
+			@Override
+			public void actionPerformed(ActionEvent a){
+				// jf.setVisible(false);
+				// System.out.println("Click Path");
+				// new MapPanelV2("img/3.png", "map/poi.txt");
+				MapPanelV2 mapPanel = new MapPanelV2("img/3.png", "map/poi.txt", "map/edges_emergence.txt");
+				jf.getContentPane().removeAll();
+				jf.getContentPane().add(mapPanel);
+				jf.revalidate();
+				jf.repaint();
+				// jf.setVisible(true);
+
+				// try {
+				// 	// new QueryPath();
+				// } catch (IOException e) {
+				// 	System.out.println("An I/O error occurred: " + e.getMessage());
+				// }
+			}
+		});
+
 		//显示地图绑定事件监听
 		jb3.addActionListener(new ActionListener(){	
 			@Override
