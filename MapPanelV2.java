@@ -23,11 +23,17 @@ public class MapPanelV2 extends JPanel {
     private JComboBox<String> sourceComboBox;
     private JComboBox<String> destComboBox;
     private JButton findPathButton;
+    private JButton addButton;
+
+    private ArrayList<JComboBox<String>> addedComboBoxs;
+    private JPanel controlPanel;
+    
 
     public MapPanelV2(String imagePath, String pointsFilePath, String edgesFilePath) {
         pointsOfInterest = new HashMap<>();
         nameToIndexMap = new HashMap<>(); 
         nodes = new ArrayList<Point>();
+        addedComboBoxs = new ArrayList<JComboBox<String>>();
 
         try {
             // Load the background image
@@ -50,16 +56,20 @@ public class MapPanelV2 extends JPanel {
     private void initializeUI() {
         setLayout(new BorderLayout());
 
-        JPanel controlPanel = new JPanel();
+        controlPanel = new JPanel();
         sourceComboBox = new JComboBox<>(pointsOfInterest.keySet().toArray(new String[0]));
         destComboBox = new JComboBox<>(pointsOfInterest.keySet().toArray(new String[0]));
         findPathButton = new JButton("查找最短路径");
+        addButton = new JButton("添加");
+
 
         controlPanel.add(new JLabel("起点:"));
         controlPanel.add(sourceComboBox);
         controlPanel.add(new JLabel("终点:"));
         controlPanel.add(destComboBox);
         controlPanel.add(findPathButton);
+        controlPanel.add(addButton);
+        
 
         add(controlPanel, BorderLayout.NORTH);
 
@@ -68,6 +78,20 @@ public class MapPanelV2 extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 findShortestPath();
+            }
+        });
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // System.out.println("Add");
+                JComboBox<String> new_combo = new JComboBox<>(pointsOfInterest.keySet().toArray(new String[0]));
+                addedComboBoxs.add(new_combo);
+                controlPanel.add(new_combo);
+                // add(controlPanel, BorderLayout.NORTH);
+                // Refresh the panel to show the new combo box
+                controlPanel.revalidate();
+                controlPanel.repaint();
             }
         });
     }
@@ -80,11 +104,25 @@ public class MapPanelV2 extends JPanel {
         int sourceIndex = nameToIndexMap.get(sourceName);
         int destIndex = nameToIndexMap.get(destName);
 
-        ArrayList<Integer> res = finder.shortestPath(sourceIndex, destIndex);
-        res_nodes = new ArrayList<Point>();
-        for (int i : res) {
-            res_nodes.add(nodes.get(i));
+        ArrayList<Integer> idxs = new ArrayList<>();
+        idxs.add(sourceIndex);
+        for (int i = 0; i < addedComboBoxs.size(); i++) {
+            JComboBox<String> cur_combox = addedComboBoxs.get(i);
+            String cur_name = (String) cur_combox.getSelectedItem();
+            idxs.add(nameToIndexMap.get(cur_name));
         }
+        idxs.add(destIndex);
+
+        res_nodes = new ArrayList<Point>();
+        for(int i = 0; i < idxs.size() - 1; i++) {
+            int src = idxs.get(i);
+            int dest = idxs.get(i + 1);
+            ArrayList<Integer> res = finder.shortestPath(src, dest);
+            for (int j : res) {
+                res_nodes.add(nodes.get(j));
+            }
+        }
+        
 
         repaint(); // Redraw the panel with the new path
     }
